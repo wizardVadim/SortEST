@@ -19,6 +19,9 @@ SortEST is program that sorts few files and creates single file with sorted data
 	4. Имена входных файлов (не менее одного):
 		Some_old_file1_name.txt
 		Some_old_file2_name.txt
+	5. Режим записи в файл (по умолчанию -f):
+		-t - добавлять в файл
+		-f - перезаписывать файл
 
 Примеры запуска из командной строки Windows:
  
@@ -45,6 +48,9 @@ Launch Parameters:
 	4. Name of the file used (one or more):
 		Some_old_file1_name.txt
 		Some_old_file2_name.txt
+	5. Writing mode (default -f):
+		-t - append
+		-f - rewrite file
 
 Windows Command Line Startup Examples:
  

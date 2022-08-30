@@ -8,7 +8,7 @@ import java.io.IOException;
 //Генерация текстовых файлов с числами
 public class Generator {
     public static void main(String[] args) {
-        String file = generate(11, 10050000, 4);
+        String file = generate(1110, 1000000, 12);
         try {
             write("inFile2.txt", file);
         } catch (IOException e) {

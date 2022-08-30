@@ -1,13 +1,14 @@
 import Parameters.DataType;
 import Parameters.SortingMode;
+import Parameters.WritingMode;
 
-import javax.print.DocFlavor;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Main {
 
+    private static WritingMode writingMode = WritingMode.REWRITE;
     private static SortingMode sortingMode = SortingMode.ASC;
     private static DataType dataType;
     private static String newFileName;
@@ -93,7 +94,7 @@ public class Main {
         }
 
         try {
-            writer(buffer);
+            writer(buffer, writingMode);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -136,33 +137,43 @@ public class Main {
         }
 
         try {
-            writer(buffer);
+            writer(buffer, writingMode);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public static void writer(StringBuffer buffer) throws IOException {
+    public static void writer(StringBuffer buffer, WritingMode writingMode) throws IOException {
         String outputFileName = "src/main/resources/output/" + newFileName;
-        FileOutputStream fileOutputStream = new FileOutputStream("src/main/resources/output/" + newFileName);
-        BufferedOutputStream bufferedOutputStream = new BufferedOutputStream(fileOutputStream, 200);
+        FileWriter fileWriter;
+        if (writingMode == WritingMode.APPEND) {
+            fileWriter = new FileWriter(outputFileName, true);
+        } else {
+            fileWriter = new FileWriter(outputFileName);
+        }
+        BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
 
-        bufferedOutputStream.write(buffer.toString().getBytes());
-        bufferedOutputStream.flush();
-        bufferedOutputStream.close();
+        bufferedWriter.write(buffer.toString());
+
+        bufferedWriter.flush();
+        bufferedWriter.close();
     }
 
     public static void takeArgs (String[] args) {
 
         for (int i = 0; i < args.length; i++) {
-            if (args[i].equals("-a")) {
-                sortingMode = SortingMode.ASC;
-            } else if (args[i].equals("-d")) {
+            if (args[i].equals("-d")) {
                 sortingMode = SortingMode.DESC;
+            } else if (args[i].equals("-a")) {
+                sortingMode = SortingMode.ASC;
             } else if (args[i].equals("-i")) {
                 dataType = DataType.INTEGER;
             } else if (args[i].equals("-s")) {
                 dataType = DataType.STRING;
+            } else if (args[i].equals("-t")) {
+                writingMode = WritingMode.APPEND;
+            } else if (args[i].equals("-f")) {
+                writingMode = WritingMode.REWRITE;
             } else if (args[i].contains(".txt")) {
                 if (newFileName == null) {
                     newFileName = args[i];
@@ -201,6 +212,8 @@ public class Main {
             buffer.append("\n");
         }
         buffer.delete(buffer.lastIndexOf("\n"), buffer.lastIndexOf(""));
+
+        reader.close();
 
         return buffer.toString();
     }
